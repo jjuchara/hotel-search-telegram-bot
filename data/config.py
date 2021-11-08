@@ -1,15 +1,20 @@
+import os
 from decouple import config
+
 
 # Данные для запуска Бота
 
-BOT_TOKEN = config('BOT_TOKEN')
 
-webhook_host = 'https://09c9-37-147-190-231.ngrok.io'
-webhook_path = '/bot.py'
+BOT_TOKEN = config('BOT_TOKEN')
+HEROKU_APP_NAME = 'skillbox-telegram-bot'
+
+
+webhook_host = f'https://{HEROKU_APP_NAME}.herokuapp.com'
+webhook_path = f'/webhook/{BOT_TOKEN}'
 webhook_url = f'{webhook_host}{webhook_path}'
 
-webapp_host = 'localhost'
-webapp_port = 3001
+webapp_host = '0.0.0.0'
+webapp_port = int(os.environ.get('PORT', '5000'))
 
 # Данные для запросов на RAPID_API
 
