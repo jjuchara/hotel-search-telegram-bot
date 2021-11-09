@@ -10,7 +10,7 @@ HEROKU_APP_NAME = 'skillbox-telegram-bot'
 
 
 webhook_host = f'https://{HEROKU_APP_NAME}.herokuapp.com'
-webhook_path = f'/webhook/{BOT_TOKEN}'
+webhook_path = f'code/bot'
 webhook_url = f'{webhook_host}{webhook_path}'
 
 webapp_host = '0.0.0.0'
