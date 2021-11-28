@@ -111,7 +111,7 @@ async def answer_city(message: types.Message, state: FSMContext):
     logger.info(f'Сохраняю ответ в state max_price')
     await Bestdeal.next()
 
-
+@dp.message_handler(state=Bestdeal.max_price)
 async def answer_max_price(message: types.Message, state: FSMContext):
     """
     Получает ответ из answer_city хэндлера, сохраняет в кэш, спрашивает следующий вопрос,
@@ -129,7 +129,7 @@ async def answer_max_price(message: types.Message, state: FSMContext):
     await message.answer(f'Укажите желаемую дистанцию до центра в км.')
     await Bestdeal.next()
 
-
+@dp.message_handler(state=Bestdeal.distance_from_center)
 async def answer_distance_from_center(message: types.Message, state: FSMContext):
     """
     Получает ответ из get_max_price хэндлера, сохраняет в кэш, спрашивает следующий вопрос,
@@ -199,6 +199,7 @@ async def answer_check_in(call: types.CallbackQuery, callback_data: dict, state:
         await Bestdeal.next()
 
 
+@dp.callback_query_handler(simple_cal_callback.filter(), state=Bestdeal.check_out_date)
 async def answer_check_out(call: types.CallbackQuery, callback_data: dict, state: FSMContext):
     """
     Получает ответ из хэндлера о дате выезда и сохраняет в state
@@ -225,7 +226,7 @@ async def answer_check_out(call: types.CallbackQuery, callback_data: dict, state
         logger.info('Сохраняю ответ в state: adult_qnt')
         await Bestdeal.next()
 
-
+@dp.message_handler(state=Bestdeal.adults_qnt)
 async def answer_adult_qnt(message: types.Message, state: FSMContext):
     """
     Получает ответ пользователя о количестве взрослых
@@ -244,7 +245,7 @@ async def answer_adult_qnt(message: types.Message, state: FSMContext):
     logger.info('Сохраняю ответ в state: adult_qnt')
     await Bestdeal.next()
 
-
+@dp.callback_query_handler(state=Bestdeal.IsPhoto)
 async def answer_is_photo(call: types.CallbackQuery, state: FSMContext):
     """
         Получает ответ из answer_hotel_amount хэндлера, сохраняет в кэш, в зависимости от результата прошлого ответа,
