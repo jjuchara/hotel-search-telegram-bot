@@ -324,25 +324,6 @@ async def answer_photo_amount(message: types.Message, state: FSMContext):
         await message.answer('Загружаю информацию, ожидайте...')
         await prepare_answer_message(tg_message_data=message, state_data=data, is_photo=True)
 
-        #     hotels: list = await get_hotels(city_id=data['city_id'], hotels_amount=data['hotels_amount'],
-        #                                     currency=data['currency'], locale=data['locale'],
-        #                                     check_in=data['check_in'], check_out=data['check_out'],
-        #                                     adults_qnt=data['adults_qnt'])
-        #
-        # if not hotels:
-        #     await message.answer('Гостиниц по Вашему запросу не найдено!')
-        # else:
-        #     data_to_user_response = await handle_request(request=hotels, message_data=data, is_photo=True)
-        #     for hotel in data_to_user_response:
-        #
-        #         hotel_id = hotel.get('hotel_id')
-        #         answer_message = f'{hotel.get("hotel_name")}\n' \
-        #                          f'адрес: {hotel.get("address")}\n' \
-        #                          f'расстояние от центра: {hotel.get("distance_from_center")}\n' \
-        #                          f'цена: {hotel.get("price")}\n' \
-        #                          f'ссылка на отель: {f"ru.hotels.com/ho{hotel_id}"}'
-        #
-        #         await message.answer(answer_message)
 
     await state.reset_state(with_data=False)
     logger.info('Очистил state')
