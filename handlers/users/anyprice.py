@@ -4,6 +4,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram_calendar import simple_cal_callback, SimpleCalendar
 from loguru import logger
+import re
 
 from bot_requests.anyprice import get_city_id, get_hotels
 from data import config
@@ -81,8 +82,11 @@ async def answer_hotel_amount(message: types.Message, state: FSMContext):
        :return: None
        """
     answer = message.text
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
     logger.info(f'Получил ответ: {answer}. Сохраняю в state')
-
+     
     async with state.proxy() as data:
         data['hotels_amount'] = int(answer)
 
@@ -156,11 +160,15 @@ async def answer_adult_qnt(message: types.Message, state: FSMContext):
     :param state:
     :return:
     """
-    answer: int = int(message.text)
+    answer = message.text
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
+
     logger.info(f'Получил ответ {answer}')
 
     async with state.proxy() as data:
-        data['adults_qnt'] = answer
+        data['adults_qnt'] = int(answer)
 
     logger.info('Спрашиваем у пользователя о количестве взрослых.')
     await message.answer('Загрузить фотографии?', reply_markup=is_photo)
@@ -239,6 +247,10 @@ async def answer_photo_amount(message: types.Message, state: FSMContext):
        :return: None
        """
     answer = message.text
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
+
     logger.info(f'Получил ответ: {answer}. Сохраняю в state')
 
     async with state.proxy() as data:

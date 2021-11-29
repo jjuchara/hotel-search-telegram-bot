@@ -107,7 +107,7 @@ async def answer_city(message: types.Message, state: FSMContext):
         data['locale'] = locale
         data['currency'] = currency
 
-    await message.answer(f'Укажите максимально допустимую цену.')
+    await message.answer(f'Укажите максимально допустимую цену в тыс.руб.')
     logger.info(f'Сохраняю ответ в state max_price')
     await Bestdeal.next()
 
@@ -120,11 +120,14 @@ async def answer_max_price(message: types.Message, state: FSMContext):
     :param state:
     :return:
     """
-    answer: float = float(re.sub(r',', '.', message.text))
+    answer = (re.sub(r',', '.', message.text))
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
     logger.info(f'Получил ответ: {answer}. Сохраняю в state')
 
     async with state.proxy() as data:
-        data['max_price'] = answer
+        data['max_price'] = float(answer)
 
     await message.answer(f'Укажите желаемую дистанцию до центра в км.')
     await Bestdeal.next()
@@ -138,11 +141,14 @@ async def answer_distance_from_center(message: types.Message, state: FSMContext)
     :param state:
     :return:
     """
-    answer: float = float(re.sub(r',', '.', message.text))
+    answer = (re.sub(r',', '.', message.text))
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
     logger.info(f'Получил ответ: {answer}. Сохраняю в state')
 
     async with state.proxy() as data:
-        data['distance_from_center'] = answer
+        data['distance_from_center'] = int(answer)
 
     await message.answer(f'Сколько отелей показать? (Max: {config.MAX_HOTELS_TO_SHOW})')
     logger.info('Сохраняю ответ в state: hotel_amount')
@@ -159,11 +165,15 @@ async def answer_hotel_amount(message: types.Message, state: FSMContext):
        :param state: Переданный контекст
        :return: None
        """
-    answer: int = int(message.text)
+    answer = message.text
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
+
     logger.info(f'Получил ответ: {answer}. Сохраняю в state')
 
     async with state.proxy() as data:
-        data['hotels_amount'] = answer
+        data['hotels_amount'] = int(answer)
 
     await message.answer('Выберите дату заезда', reply_markup=await SimpleCalendar().start_calendar())
     logger.info('Сохраняю ответ в state: hotel_amount')
@@ -234,11 +244,15 @@ async def answer_adult_qnt(message: types.Message, state: FSMContext):
     :param state:
     :return:
     """
-    answer: int = int(message.text)
+    answer = message.text
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
+
     logger.info(f'Получил ответ {answer}')
 
     async with state.proxy() as data:
-        data['adults_qnt'] = answer
+        data['adults_qnt'] = int(answer)
 
     logger.info('Спрашиваем у пользователя о количестве взрослых.')
     await message.answer('Загрузить фотографии?', reply_markup=is_photo)
@@ -301,6 +315,10 @@ async def answer_photo_amount(message: types.Message, state: FSMContext):
        :return: None
        """
     answer = message.text
+    pattern = re.search(r'\D', answer)
+    if pattern:
+        await message.answer('Введите цифрами')
+
     logger.info(f'Получил ответ: {answer}. Сохраняю в state')
 
     async with state.proxy() as data:
